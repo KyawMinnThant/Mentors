@@ -36,12 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={dmSans.className}>
-      <body>
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <div lang="en" className={dmSans.className}>
+      <Navbar />
+      {children}
+      <Footer />
+    </div>
   );
 }

@@ -13,11 +13,27 @@ import { database, auth } from "@/firebaseConfig"; // Adjust imports
 import { onAuthStateChanged } from "firebase/auth";
 import CourseCard from "../courses/coursecard";
 import { Course, Mentor } from "@/lib/types/type";
+import { motion } from "framer-motion";
 
 type Enrollment = {
   id: string;
   courseId: string;
   userId: string;
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
 const ProfileCourse: React.FC = () => {
@@ -86,11 +102,18 @@ const ProfileCourse: React.FC = () => {
     <div className=" lg:mr-[120px] md:mr-[60px] mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">My Enrolled Courses</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {enrolledCourses.map(({ course, mentor }) => (
-          <CourseCard key={course.id} course={course} mentorInfo={mentor} />
+          <motion.div key={course.id} variants={cardVariants}>
+            <CourseCard course={course} mentorInfo={mentor} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

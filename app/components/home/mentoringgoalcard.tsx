@@ -1,21 +1,27 @@
+"use client";
 import React from "react";
 import { MapPin, Briefcase, Cake, Star } from "lucide-react";
-import { Timestamp } from "firebase/firestore";
 import { Mentor } from "@/lib/types/type";
+import { motion } from "framer-motion";
 
 type GoalType = {
   goal: Mentor;
 };
 
 const MentoringGoalCard: React.FC<GoalType> = ({ goal }) => {
-  console.log(goal);
   const mentorRating = 5;
-  const rating = mentorRating || 4.5; // default rating if none given
+  const rating = mentorRating || 4.5;
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
 
   return (
-    <article className="bg-white border overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center rounded-xl">
+    <motion.div
+      className="bg-white border overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center rounded-xl"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       {/* IMAGE */}
       <div className="w-full h-[40vh] overflow-hidden mb-4">
         <img
@@ -57,15 +63,13 @@ const MentoringGoalCard: React.FC<GoalType> = ({ goal }) => {
         <span className="text-sm text-gray-600 ml-2">{rating.toFixed(1)}</span>
       </div>
 
-      {/* INFO SECTION */}
+      {/* INFO */}
       <div className="flex flex-col gap-2 mt-4 text-gray-600 text-sm">
-        {/* AGE */}
         <div className="flex items-center gap-2">
           <Cake size={16} className="text-blue-600" />
           <span>Age: {goal.age}</span>
         </div>
 
-        {/* LOCATION */}
         <div className="flex items-center gap-2">
           <MapPin size={16} className="text-red-500" />
           <span>{goal.location}</span>
@@ -73,7 +77,7 @@ const MentoringGoalCard: React.FC<GoalType> = ({ goal }) => {
       </div>
 
       <div className="h-6"></div>
-    </article>
+    </motion.div>
   );
 };
 

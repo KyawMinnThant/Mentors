@@ -57,7 +57,37 @@ const CourseList = ({ type }: { type?: string }) => {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading courses...</p>;
+  if (loading)
+    return (
+      <div className="bg-white w-[30%] mt-10 rounded-lg shadow-md overflow-hidden flex flex-col animate-pulse">
+        {/* Image placeholder */}
+        <div className="w-full h-40 bg-gray-300" />
+
+        {/* Content */}
+        <div className="p-4 flex flex-col flex-grow space-y-4">
+          {/* Title */}
+          <div className="h-6 bg-gray-300 rounded w-3/4" />
+
+          {/* Level badge */}
+          <div className="h-4 bg-gray-300 rounded w-1/4" />
+
+          {/* Description */}
+          <div className="h-12 bg-gray-300 rounded" />
+
+          {/* Mentor info */}
+          <div className="flex items-center gap-3">
+            <div className="w-[30px] h-[30px] bg-gray-300 rounded-full" />
+            <div className="flex flex-col flex-grow space-y-2">
+              <div className="h-4 bg-gray-300 rounded w-1/2" />
+              <div className="h-3 bg-gray-300 rounded w-1/3" />
+            </div>
+          </div>
+
+          {/* Button */}
+          <div className="h-10 bg-gray-300 rounded mt-auto" />
+        </div>
+      </div>
+    );
 
   console.log(categories);
   // Clean and normalize type for comparison

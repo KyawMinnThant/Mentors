@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import { Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 type UpdateType = {
   adminName: string;
@@ -15,7 +18,13 @@ type UpdateCardProps = {
 
 const UpdateCard: React.FC<UpdateCardProps> = ({ update }) => {
   return (
-    <article className="bg-white p-6 border rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between">
+    <motion.div
+      className="bg-white p-6 border rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       {/* Admin Info */}
       <div className="flex items-center gap-3 mb-4">
         <img
@@ -46,7 +55,7 @@ const UpdateCard: React.FC<UpdateCardProps> = ({ update }) => {
         <Clock className="w-4 h-4" />
         <span>{update.time}</span>
       </div>
-    </article>
+    </motion.div>
   );
 };
 

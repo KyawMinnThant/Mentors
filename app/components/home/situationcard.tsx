@@ -1,4 +1,7 @@
+"use client";
+
 import React, { ReactNode } from "react";
+import { motion } from "framer-motion";
 
 type situationStep = {
   title: string;
@@ -12,13 +15,17 @@ type SituationCardProps = {
 
 const SituationCard: React.FC<SituationCardProps> = ({ situation }) => {
   return (
-    <article
+    <motion.article
       className="
         group bg-white border rounded-lg p-6 
         flex flex-col items-center text-center 
         shadow-sm hover:shadow-lg transition-all duration-300
         hover:-translate-y-1
       "
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {/* Icon */}
       <div
@@ -40,7 +47,7 @@ const SituationCard: React.FC<SituationCardProps> = ({ situation }) => {
       <p className="text-gray-600 text-sm mt-1 group-hover:text-blue-700 group-hover:opacity-90 transition-colors duration-300">
         {situation.title}
       </p>
-    </article>
+    </motion.article>
   );
 };
 

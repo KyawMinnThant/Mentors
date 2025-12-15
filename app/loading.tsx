@@ -14,6 +14,7 @@ const MentorCardSkeleton: React.FC = () => {
         sm:max-w-md
         md:max-w-lg
         lg:max-w-xl
+        mt-10
         xl:max-w-2xl
         mx-auto
         animate-pulse

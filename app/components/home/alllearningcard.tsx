@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { motion } from "framer-motion";
 
 type AllLearning = {
   title: string;
@@ -11,7 +14,13 @@ type AllLearningType = {
 
 const AllLearningCard: React.FC<AllLearningType> = ({ learning }) => {
   return (
-    <article className="relative h-[50vh] w-full rounded-xl overflow-hidden group cursor-pointer">
+    <motion.div
+      className="relative h-[50vh] w-full rounded-xl overflow-hidden group cursor-pointer"
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       {/* BACKGROUND IMAGE */}
       <img
         src={learning.image}
@@ -31,7 +40,7 @@ const AllLearningCard: React.FC<AllLearningType> = ({ learning }) => {
       >
         {learning.title}
       </h2>
-    </article>
+    </motion.div>
   );
 };
 

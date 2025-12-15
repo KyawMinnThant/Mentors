@@ -6,10 +6,9 @@ import Menunav from "./menunav";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
 import { useAuthStore } from "../store/useAuthStore";
-import { clearAuthCookie } from "@/lib/auth/setAuthCookies";
 
 type MenuItem = {
   label: string;
@@ -21,9 +20,12 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, setUser, setLoading, loading } = useAuthStore();
 
+  // New state for cookie validation from your API
+  const [cookieValid, setCookieValid] = useState<boolean | null>(null);
+
   const isActive = (href: string) => pathname === href;
 
-  // Merged menu data
+  // Your menus remain unchanged
   const mentorMenu: MenuItem[] = [
     { label: "Mentor List", href: "/mentor-list" },
     { label: "How To Find A Mentor", href: "/how-to-find-a-mentor" },
@@ -41,24 +43,34 @@ const Navbar = () => {
     { label: "Sciences", href: "course?type=sciences" },
     { label: "DevOps", href: "course?type=devops" },
     { label: "Designs", href: "course?type=designs" },
-
     { label: "Computer Science", href: "course?type=computerscience" },
     { label: "Web Development", href: "course?type=webdevelopment" },
   ];
 
   useEffect(() => {
+    // Firebase auth listener
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, [setUser, setLoading]);
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    await clearAuthCookie();
-  };
+  useEffect(() => {
+    // Call your API route to validate cookies
+    const validateCookies = async () => {
+      try {
+        const res = await fetch("/api/auth/status"); // Adjust your API route if needed
+        if (!res.ok) throw new Error("Failed to validate cookies");
+        const data = await res.json();
+        setCookieValid(data.loggedIn);
+      } catch {
+        setCookieValid(false);
+      }
+    };
+
+    validateCookies();
+  }, []);
 
   return (
     <nav className="bg-white shadow-sm p-5 font-dmsans fixed w-full z-50 top-0">
@@ -139,7 +151,8 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {!user && !loading ? (
+          {/* Use cookieValid along with your existing user and loading state */}
+          {cookieValid === false && !loading ? (
             <Link
               href="/login"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -147,18 +160,21 @@ const Navbar = () => {
               Login
             </Link>
           ) : (
-            <Link
-              href="/profile"
-              className="flex gap-2 items-center cursor-pointer hover:text-blue-600"
-            >
-              <img
-                src={`${user?.photoURL}`}
-                className="w-8 h-8 rounded-full"
-                alt=""
-              />
-              <p>{user?.displayName}</p>
-            </Link>
+            user && (
+              <Link
+                href="/profile"
+                className="flex gap-2 items-center cursor-pointer hover:text-blue-600"
+              >
+                <img
+                  src={`${user?.photoURL}`}
+                  className="w-8 h-8 rounded-full"
+                  alt=""
+                />
+                <p>{user?.displayName}</p>
+              </Link>
+            )
           )}
+
           {loading && <p>Loading... </p>}
         </div>
 
@@ -214,7 +230,8 @@ const Navbar = () => {
               </span>
             </Link>
 
-            {!user && !loading && (
+            {/* Same login check for mobile menu */}
+            {cookieValid === false && !loading && (
               <Link
                 href="/login"
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
@@ -222,7 +239,7 @@ const Navbar = () => {
                 Login
               </Link>
             )}
-            {user && !loading && (
+            {user && cookieValid === true && !loading && (
               <Link href="/profile" className="flex gap-2 items-center">
                 <img
                   src={`${user?.photoURL}`}
