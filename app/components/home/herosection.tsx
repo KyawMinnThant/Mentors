@@ -13,7 +13,7 @@ const HeroSection = () => {
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-70 h-[95vh] overflow-y-hidden"></div>
+      <div className="absolute overflow-hidden inset-0 bg-black opacity-70 h-[95vh] overflow-y-hidden"></div>
 
       {/* Content container */}
       <motion.div

@@ -9,7 +9,7 @@ import Review from "../components/home/review";
 
 const Home = () => {
   return (
-    <div className=" overflow-x-hidden">
+    <div className=" overflow-hidden">
       <HeroSection />
       <MentoringFlow />
       <MetoringGoal />
